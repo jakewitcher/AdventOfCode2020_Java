@@ -1,11 +1,15 @@
 import day1.ExpenseReport;
 import day2.Passwords;
+import day3.Route;
+import day3.Slope;
 import input.InputReader;
+
+import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
-        day2Part1();
-        day2Part2();
+        day3Part1();
+        day3Part2();
     }
 
     private static void day1Part1() {
@@ -32,5 +36,29 @@ public class Main {
         var maybePoliciesAndPasswords = InputReader.readAsStrings("./src/main/java/day2/input.txt");
         maybePoliciesAndPasswords.map(Passwords::new).ifPresent(passwords ->
                 System.out.println(passwords.countValidByTobogganRentalPolicy()));
+    }
+
+    private static void day3Part1() {
+        var maybeForrestMap = InputReader.readAsStrings("./src/main/java/day3/input.txt");
+        var slope = new Slope(1, 3);
+        maybeForrestMap.map(Route::new).ifPresent(route ->
+                System.out.println(route.countTrees(slope)));
+    }
+
+    private static void day3Part2() {
+        var maybeForrestMap = InputReader.readAsStrings("./src/main/java/day3/input.txt");
+        var slopes = Arrays.asList(
+                new Slope(1, 1),
+                new Slope(1, 3),
+                new Slope(1, 5),
+                new Slope(1, 7),
+                new Slope(2, 1)
+        );
+
+        maybeForrestMap.map(Route::new).ifPresent(route -> {
+            var product = slopes.stream().mapToLong(route::countTrees)
+                    .reduce((a, b) -> a * b).orElseThrow();
+            System.out.println(product);
+        });
     }
 }
